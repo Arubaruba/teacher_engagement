@@ -3,6 +3,9 @@
 require('../../config.php');
 require('./lib.php');
 require_once($CFG->dirroot.'/lib/tablelib.php');
+require_once('./db/install.php');
+
+xmldb_report_teacher_engagement_install();
 
 require_login();
 
@@ -26,9 +29,9 @@ echo $OUTPUT->header();
 // TODO translation
 $sql_fields = 'CONCAT({user}.firstname, " ", {user}.lastname) AS "teacher", {user}.email AS "email address", {user}.phone1 AS "phone",
     GROUP_CONCAT(DISTINCT {course}.shortname ORDER BY {course}.shortname SEPARATOR ", ") AS "courses",
-    "neglected courses",
-    "time on moodle this week",
-    "average time on moodle per week"';
+    "TODO" AS "neglected courses",
+    "TODO" AS "time on moodle this week",
+    "TODO" AS "average time on moodle per week"';
 $sql_from = '{user}
     INNER JOIN {role_assignments} ON {role_assignments}.userid = {user}.id
         AND ({role_assignments}.roleid = 3 OR {role_assignments}.roleid = 4)

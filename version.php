@@ -8,6 +8,6 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = 2014110404;
+$plugin->version = 2014110405;
 $plugin->requires = 2014110400;
 $plugin->component = 'report_teacher_engagement';

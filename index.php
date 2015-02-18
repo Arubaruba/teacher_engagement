@@ -30,14 +30,13 @@ echo $OUTPUT->header();
 $sql_fields = 'CONCAT({user}.firstname, " ", {user}.lastname) AS "teacher", {user}.email AS "email address", {user}.phone1 AS "phone",
     GROUP_CONCAT(DISTINCT {course}.shortname ORDER BY {course}.shortname SEPARATOR ", ") AS "courses",
     "TODO" AS "neglected courses",
-    "TODO" AS "time on moodle this week",
+    get_time_spent_on_moodle({user}.id) AS "time on moodle this week",
     "TODO" AS "average time on moodle per week"';
 $sql_from = '{user}
     INNER JOIN {role_assignments} ON {role_assignments}.userid = {user}.id
         AND ({role_assignments}.roleid = 3 OR {role_assignments}.roleid = 4)
     LEFT JOIN {context} ON contextlevel = 50 AND {context}.id = {role_assignments}.contextid
-    LEFT JOIN {course} ON {course}.id = {context}.instanceid AND {course}.visible = 1 AND {course}.format != "site"
-        '; // teacher or editingteacher
+    LEFT JOIN {course} ON {course}.id = {context}.instanceid AND {course}.visible = 1 AND {course}.format != "site"'; // teacher or editingteacher
 $sql_where = '1';
 
 $table = new table_sql('uniqueid');

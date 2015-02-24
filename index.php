@@ -1,15 +1,18 @@
 <?php
 
-require('../../config.php');
-require('./lib.php');
-require_once($CFG->dirroot.'/lib/tablelib.php');
-require_once('./db/install.php');
+ini_set('display_errors',1);
+ini_set('display_startup_errors',1);
+error_reporting(-1);
 
-xmldb_report_teacher_engagement_install();
+require_once('../../config.php');
+require_once('lib.php');
+require_once('classes/progress_report.php');
+require_once('classes/activity/action.php');
+require_once('classes/activity/reaction.php');
 
 require_login();
 
-global $USER;
+global $USER, $DB;
 
 // Set Renderer Options
 $PAGE->set_pagelayout('report'); // To add the sidebar
@@ -26,21 +29,17 @@ if (!report_teacher_engagement_can_access_user_report($USER)) {
 
 echo $OUTPUT->header();
 
-// TODO translation
-$sql_fields = 'CONCAT({user}.firstname, " ", {user}.lastname) AS "teacher", {user}.email AS "email address", {user}.phone1 AS "phone",
-    GROUP_CONCAT(DISTINCT {course}.shortname ORDER BY {course}.shortname SEPARATOR ", ") AS "courses",
-    "TODO" AS "neglected courses",
-    get_time_spent_on_moodle({user}.id) AS "time on moodle this week",
-    "TODO" AS "average time on moodle per week"';
-$sql_from = '{user}
-    INNER JOIN {role_assignments} ON {role_assignments}.userid = {user}.id
-        AND ({role_assignments}.roleid = 3 OR {role_assignments}.roleid = 4)
-    LEFT JOIN {context} ON contextlevel = 50 AND {context}.id = {role_assignments}.contextid
-    LEFT JOIN {course} ON {course}.id = {context}.instanceid AND {course}.visible = 1 AND {course}.format != "site"'; // teacher or editingteacher
-$sql_where = '1';
+function get_id($record) {return $record->id;}
+$teacher_ids = array_map('get_id', array_values($DB->get_records_sql('
+  SELECT {user}.id FROM {user}
+  INNER JOIN {role_assignments} ON {role_assignments}.userid = {user}.id
+  AND ({role_assignments}.roleid = 3 OR {role_assignments}.roleid = 4)
+')));
 
-$table = new table_sql('uniqueid');
-$table->set_sql($sql_fields, $sql_from, $sql_where);
-$table->out(40, true);
+$report = new progress_report($teacher_ids, array(), array(
+    new reaction(array('\\mod_assign\\event\\submission_created', '\\mod_assign\\event\\submission_updated'), '', 100000)
+));
+
+echo $report->render();
 
 echo $OUTPUT->footer();

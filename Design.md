@@ -4,6 +4,8 @@ _* These proposals are not exclusive to each other_
 
 ## Proposal 1
 
+[Wireframe.cc Design](https://wireframe.cc/hL5vPx)
+
 Proposal 1 is a detailed report with a column for every day. Primary activities in need of teacher attention will be listed according to the most neglected items. Different types of items also have different priorities. For example, not replying to a forum post for 2 days could be worse than not grading an assignment after 4 days.
 
 ### Implementation Details
@@ -50,9 +52,46 @@ Possible options include:
 
 ## Proposal 2
 
+[Wireframe.cc Design](https://wireframe.cc/6M6vkE)
+
 Proposal 2 is a time chart similar to [the one Github has](https://github.com/arubaruba)
 
 ### Possible Ways to Structure the Data Include
 
 * By Course and Unique Teacher (If a course has multiple teachers it will appear multiple times)
 * By Teacher (No way of discriminating between courses)
+
+## Proposal 3
+
+A simple table with the values:
+
+* Average number of days active per week
+* Average number of times that course reports are viewed per week
+* Average moodle session duration
+* Average time to grade assignment
+* Average time to respond to forum post
+* Percentage of assignments graded within 7 days
+* Percentage of forum posts responded to within 3 days
+
+These boil down to a basic formula:
+
+#### For __Actions__
+
+ * Average number of times _action_ per week
+ 
+#### For __Reactions__
+  
+  * Percentage of _reaction_ within _suggested_response_time_
+  * Average time to _reaction_
+
+Whoever is viewing the chart may also adjust the time frame to get stats from:
+
+* The last 7 days
+* The last 30 days
+* The last 100 days
+
+### Optional Features
+
+* Ability for users to add actions and reactions themselves
+* Graphs to compare teachers
+
